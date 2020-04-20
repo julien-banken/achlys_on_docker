@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+
+  node1:
+    hostname: node1
+    image: achlys
+    tty: true
+    command: sh -c "cd /home/docker/achlys && make snameshell n=0 PEER_PORT=27000"
+    networks: ["achlys-net"]
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  node2:
+    hostname: node2
+    image: achlys
+    tty: true
+    command: sh -c "cd /home/docker/achlys && make snameshell n=0 PEER_PORT=27000"
+    networks: ["achlys-net"]
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports: ["80:8080"]
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks: ["achlys-net"]
+
+networks:
+  achlys-net:
+    driver: overlay
+    attachable: true # If set to true, then standalone containers can attach to this network, in addition to services. If a standalone container attaches to an overlay network, it can communicate with services and standalone containers that are also attached to the overlay network from other Docker daemons.
+    external: false
+    ipam: # IP address manager
+      config:
+        - subnet: 172.20.0.0/16
