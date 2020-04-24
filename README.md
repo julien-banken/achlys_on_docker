@@ -40,6 +40,50 @@ docker exec -it <container id/name> /bin/bash
 erl -sname remote_shell -remsh achlys0@node1 -setcookie MyCookie
 ```
 
+### Azure - docker-machine
+
+Step 1: Install docker-machine
+
+Step 2: Install Azure CLI
+
+Step 3: Login to Azure
+
+```
+az login
+```
+
+Step 4: get the subscription id
+
+```
+sub=$(az account show --query "id" -o tsv)
+```
+
+Step 5: Spawn a new VM
+
+List all location:
+
+```
+az account list-locations
+az account list-locations -o table
+```
+
+List of images:
+
+```
+az vm image list --output table
+```
+
+```
+docker-machine create -d azure \
+    --azure-subscription-id $sub \
+    --azure-ssh-user azureuser \
+    --azure-open-port 80 \
+    --azure-size "Standard_D2s_v3" \
+    --azure-location "eastus" \
+    --azure-image "Canonical:UbuntuServer:18.04-LTS:latest" \
+    achlys1
+```
+
 ## Tips
 
 Fix ssh disconnection with the vm:
