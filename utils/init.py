@@ -13,17 +13,18 @@ def get_boards(neighbors):
 
 def run(client, n):
   for (i, neighbors) in enumerate(full_mesh_topology(n)):
+    
     service_name = get_service_name(i)
     boards = get_boards(neighbors)
+
     print("node: {0}".format(service_name))
     print("boards: {0}".format(boards))
-    # TODO: Spawn un service
-
+    # https://docker-py.readthedocs.io/en/stable/user_guides/swarm_services.html
+    
     # print(i)
     # print(neightbors)
 
 if __name__ == '__main__':
-
 
   # https://docker-py.readthedocs.io/en/stable/user_guides/swarm_services.html
   

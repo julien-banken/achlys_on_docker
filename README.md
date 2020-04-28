@@ -95,3 +95,5 @@ sudo dhclient enp0s8 -v
 ## Documentation
 
 - [Docker SDK for Python](https://docker-py.readthedocs.io/en/stable/#)
+- [Guide Azure](https://docs.ansible.com/ansible/latest/scenario_guides/guide_azure.html)
+- [Azure credentials](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal)

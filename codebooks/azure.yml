@@ -1,0 +1,56 @@
+---
+- hosts: localhost
+  vars:
+    ssh_key: ""
+  tasks:
+    - name: Create a resource group
+      azure_rm_resourcegroup:
+        name: myResourceGroup
+        location: westus
+    - name: Create virtual network
+      azure_rm_virtualnetwork:
+        resource_group: myResourceGroup
+        name: testvn001
+        address_prefixes: "172.30.0.0/16"
+    - name: Add subnet
+      azure_rm_subnet:
+        resource_group: myResourceGroup
+        name: subnet001
+        address_prefix: "172.30.0.0/24"
+        virtual_network: testvn001
+    - name: Create a VM
+      azure_rm_virtualmachine:
+        resource_group: myResourceGroup
+        name: vm1
+        vm_size: Standard_D2s_v3
+        admin_username: azureuser
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: /home/azureuser/.ssh/authorized_keys
+            key_data: "{{ ssh_key }}"
+        image:
+          offer: CentOS
+          publisher: OpenLogic
+          sku: '7.5'
+          version: latest
+
+
+# https://docs.ansible.com/ansible/latest/modules/list_of_cloud_modules.html
+# https://docs.ansible.com/ansible/latest/modules/azure_rm_resourcegroup_module.html
+
+# ansible-playbook -i inventory/hosts azure.yml
+
+# https://docs.ansible.com/ansible/latest/modules/azure_rm_virtualmachine_module.html
+
+# azure_rm_virtualmachine:
+#   resource_group: Testing
+#   name: testvm10
+#   vm_size: Standard_D2s_v3
+#   admin_username: chouseknecht
+#   ssh_password_enabled: false
+#   ssh_public_keys: "{{ ssh_keys }}"
+#   image:
+#     offer: CentOS
+#     publisher: OpenLogic
+#     sku: '7.1'
+#     version: latest
